@@ -38,7 +38,8 @@ public class Principal {
                     1 - Buscar Livro
                     2- Lista de livros
                     3- Lista de autores
-                    4- Consultar livro cadastrado
+                    4- Lista de autores vivos por ano
+                    5- Lista livros por idioma
                     
                     0 - Sair                                 
                     """;
@@ -60,6 +61,9 @@ public class Principal {
                 case 4:
                     listaAutoresVivosPorAno();
                     break;
+                case 5:
+                    listaLivrosPorIdioma();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -68,6 +72,7 @@ public class Principal {
             }
         }
     }
+
 
 
     @Transactional
@@ -166,7 +171,7 @@ public class Principal {
                 autores.forEach(System.out::println);
             } else {
                 System.out.println("============================");
-                System.out.println("No results, enter another year");
+                System.out.println("Nenhum autor encontrado!!");
                 System.out.println("============================ \n");
             }
 
@@ -177,7 +182,59 @@ public class Principal {
     }
 
 
+    private void listaLivrosPorIdioma() {
+        var opcao = -1;
+        String idioma = "";
+            var idiomaMenu = """
+                    1 - Inglês
+                    2- Portugues
+                    3- Espanhol
+                    4- Francês
+                                             
+                    """;
 
+            System.out.println(idiomaMenu);
 
+            if(leitura.hasNextInt()) {
+
+                opcao = leitura.nextInt();
+
+                switch (opcao) {
+                    case 1:
+                        idioma = "en";
+                        break;
+                    case 2:
+                        idioma = "pt";
+                        break;
+                    case 3:
+                        idioma = "es";
+                        break;
+                    case 4:
+                        idioma = "fr";
+                        break;
+                    default:
+                        System.out.println("Opção inválida");
+                }
+
+                System.out.println("============================");
+                System.out.println("Livros Registrados nesse idioma:");
+                System.out.println("============================ \n");
+                List<Livro> livro = livroRepository.findByLanguage(idioma);
+
+                if(!livro.isEmpty()){
+                    livro.forEach(System.out::println);
+                }else {
+                    System.out.println("============================");
+                    System.out.println("\n Não existe livros nesse idioma!");
+                    System.out.println("============================ \n");
+                }
+
+            } else{
+                System.out.println("============================");
+                System.out.println("Opção inválida!!!");
+                System.out.println("============================ \n");
+                leitura.next();
+            }
+    }
 
 }
